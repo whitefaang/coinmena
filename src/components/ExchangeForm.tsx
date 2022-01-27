@@ -1,45 +1,56 @@
 import classNames from 'classnames'
-import React, { useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import useDebounce from '../hooks/useDebounce'
 import { Coin, Country } from '../models'
 import { getExchangeRate } from '../services'
 import Button from './atomic/Button'
+import Input from './atomic/Input'
 import Modal from './atomic/Modal'
+
+type Direction = 'ctf' | 'ftc'
 
 type Props = {
   initialCrypto: Coin
+  initialDirection?: Direction
   availableFiats: Record<string, Country>
   availableCryptos: Coin[]
 }
 
-/**
- * func to convert a number with scientific notations to human readable comma seperated number
- * @param {any} num
- * @returns {string}
- */
-const scientificToReadable = (num: any) => {
-  if (Math.abs(num) < 1.0) {
-    var e = parseInt(num.toString().split('e-')[1])
-    if (e) {
-      num *= Math.pow(10, e - 1)
-      num = '0.' + new Array(e).join('0') + num.toString().substring(2)
-    }
-  } else {
-    var e = parseInt(num.toString().split('+')[1])
-    if (e > 20) {
-      e -= 20
-      num /= Math.pow(10, e)
-      num += new Array(e + 1).join('0')
-    }
-  }
-  return num
+const directionMap = {
+  ctf: 'ctf',
+  ftc: 'ftc',
+}
+
+const SearchWrapper = ({
+  children,
+}: {
+  children: (
+    searchKey: string,
+    setSearchKey: (searchKey: string) => void
+  ) => ReactElement
+}) => {
+  const [searchKey, setSearchKey] = useState('')
+  const render = () => children(searchKey, setSearchKey)
+  return (
+    <div>
+      <Input
+        name="searchKey"
+        className="shadow-md sticky"
+        placeholder="Search .."
+        value={searchKey}
+        onChange={(e: any) => setSearchKey(e.target.value)}
+      />
+      {render()}
+    </div>
+  )
 }
 
 function ExchangeForm({
   availableCryptos,
   availableFiats,
   initialCrypto,
+  initialDirection,
 }: Props) {
   // form state for the state
   const [form, setForm] = useState<{
@@ -47,14 +58,16 @@ function ExchangeForm({
     fiat: Country
     cryptoAmount: number
     fiatAmount: number
-    conversionDir: 'ctf' | 'ftc'
+    conversionDir: Direction
     modal: 'crypto' | 'fiat' | null
   }>({
     fiat: { code: 'USD', description: 'United Stated Dollar' },
     crypto: initialCrypto,
     fiatAmount: 1,
     cryptoAmount: 1,
-    conversionDir: 'ftc',
+    conversionDir: initialDirection
+      ? (directionMap[initialDirection] as any) || 'ctf'
+      : 'ctf' || 'ctf',
     modal: null,
   })
 
@@ -100,8 +113,8 @@ function ExchangeForm({
   }, [
     exchangeRateApi.data?.info?.rate,
     form.crypto.ID,
-    form.fiatAmount,
-    form.cryptoAmount,
+    debouncedFiatAmount,
+    debouncedCryptoAmount,
   ])
 
   const selectCrypto = (crypto: Coin) => {
@@ -112,48 +125,36 @@ function ExchangeForm({
     setForm((prev) => ({ ...prev, fiat, modal: null }))
   }
 
-  const Cryptos = () => {
-    return (
-      <div className="grid lg:grid-cols-3 gap-4 p-4">
-        {availableCryptos.map((c) => (
-          <div
-            key={c.ID}
-            className="px-3 py-4 border flex gap-7 shadow-sm cursor-pointer hover:shadow-md rounded-md"
-            onClick={() => selectCrypto(c)}
-          >
-            <img src={c.Logo} alt={c.Name} className="w-12 h-12" />
-            <div className="flex-1 font-semibold">
-              <p>{c.Name}</p>
-              <p className="font-semibold">${c.Price}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    )
-  }
-
   const Fiats = () => {
     return (
-      <div className="grid 2xl:grid-cols-3 gap-4 p-4">
-        {Object.entries(availableFiats.symbols).map((f: any) => {
-          const [code, val] = f
-          return (
-            <div
-              key={code}
-              className="px-3 py-4 border flex items-center gap-7 shadow-sm cursor-pointer hover:shadow-md rounded-md"
-              onClick={() => selectFiat(val)}
-            >
-              <div
-                className={`w-12 h-8 shadow-lg currency-flag currency-flag-${code.toLowerCase()}`}
-              />
-              <div className="flex-1 font-semibold">
-                <p>{code}</p>
-                <p className="font-semibold">{val.description}</p>
-              </div>
-            </div>
-          )
-        })}
-      </div>
+      <SearchWrapper>
+        {(searchKey) => (
+          <div className="grid lg:grid-cols-2 2xl:grid-cols-3 gap-4 p-4">
+            {Object.entries(availableFiats.symbols).map((f: any) => {
+              const [code, val] = f
+              return JSON.stringify(Object.values(val)).match(
+                new RegExp(searchKey, 'i')
+              ) ? (
+                <div
+                  key={code}
+                  className="px-3 py-4 border flex items-center gap-7 shadow-sm cursor-pointer hover:shadow-md rounded-md"
+                  onClick={() => selectFiat(val)}
+                >
+                  <div
+                    className={`w-12 h-8 shadow-lg currency-flag currency-flag-${code.toLowerCase()}`}
+                  />
+                  <div className="flex-1 font-semibold">
+                    <p>{code}</p>
+                    <p className="font-semibold">{val.description}</p>
+                  </div>
+                </div>
+              ) : (
+                ''
+              )
+            })}
+          </div>
+        )}
+      </SearchWrapper>
     )
   }
 
@@ -161,7 +162,9 @@ function ExchangeForm({
     setForm((prev) => ({ ...prev, modal }))
   }
 
-  const closeModal = () => setForm((prev) => ({ ...prev, modal: null }))
+  const closeModal = () => {
+    setForm((prev) => ({ ...prev, modal: null }))
+  }
 
   const onAmountChange = (e: any) => {
     if (e.target.value && !/^-?\d+\.?\d*$/.exec(e.target.value)) {
@@ -188,7 +191,41 @@ function ExchangeForm({
     <>
       <Modal show={!!form.modal} onOverlayClick={closeModal}>
         <div className="bg-surface w-11/12 2xl:w-2/3 h-3/4 overflow-y-auto rounded-lg shadow-lg p-3">
-          {form.modal === 'crypto' ? <Cryptos /> : <Fiats />}
+          <div className="relative h-full">
+            {form.modal === 'crypto' ? (
+              <SearchWrapper>
+                {(searchKey) => (
+                  <div className="grid lg:grid-cols-2 2xl:grid-cols-3 gap-4 p-4">
+                    {availableCryptos.map((c) =>
+                      JSON.stringify(Object.values(c)).match(
+                        new RegExp(searchKey, 'i')
+                      ) ? (
+                        <div
+                          key={c.ID}
+                          className="px-3 py-4 border flex gap-7 shadow-sm cursor-pointer hover:shadow-md rounded-md"
+                          onClick={() => selectCrypto(c)}
+                        >
+                          <img
+                            src={c.Logo}
+                            alt={c.Name}
+                            className="w-12 h-12"
+                          />
+                          <div className="flex-1 font-semibold">
+                            <p>{c.Name}</p>
+                            <p className="font-semibold">${c.Price}</p>
+                          </div>
+                        </div>
+                      ) : (
+                        ''
+                      )
+                    )}
+                  </div>
+                )}
+              </SearchWrapper>
+            ) : (
+              <Fiats />
+            )}
+          </div>
         </div>
       </Modal>
       <div className="w-full flex flex-wrap bg-surface h-full rounded-lg p-4 shadow-md justify-between">

@@ -83,7 +83,7 @@ function Home() {
                   </div>
                   <Link
                     className="w-full"
-                    to={`/trade?base=${selectedCoin.Symbol}`}
+                    to={`/trade?base=${selectedCoin.Symbol}&dir=${value}`}
                   >
                     <Button id="buySell" className="w-full">
                       Proceed to {value}

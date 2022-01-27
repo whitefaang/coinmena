@@ -4,6 +4,7 @@
 import React, { useState } from 'react'
 import { useUIStore } from '../store/uiStore'
 import Button from './atomic/Button'
+import Input from './atomic/Input'
 
 interface Props {
   onSuccess?: () => void
@@ -69,34 +70,22 @@ function LoginForm({ onSuccess }: Props) {
     <form className="grid gap-6" onSubmit={onSubmit} noValidate>
       <div className="text-4xl font-bold">Hi, Welcome Back!</div>
       <p className="text-color-muted mb-5">Start trading now!</p>
-      <div>
-        <label htmlFor="email" className="font-semibold">
-          Email
-        </label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          className="w-full shadow-sm rounded-3xl focus:outline-none border border-primary-muted focus:border-2 p-4"
-          value={form.email}
-          onChange={onChange}
-        />
-        <small className="text-red-500">{errors.email}</small>
-      </div>
-      <div>
-        <label htmlFor="password" className="font-semibold">
-          Password
-        </label>
-        <input
-          id="password"
-          type="password"
-          name="password"
-          value={form.password}
-          className="w-full shadow-sm rounded-3xl focus:outline-none border border-primary-muted focus:border-2 p-4"
-          onChange={onChange}
-        />
-        <small className="text-red-500">{errors.password}</small>
-      </div>
+      <Input
+        label="Email"
+        type="email"
+        name="email"
+        value={form.email}
+        onChange={onChange}
+        error={errors.email}
+      />
+      <Input
+        label="Password"
+        type="password"
+        name="password"
+        value={form.password}
+        onChange={onChange}
+        error={errors.password}
+      />
       <Button className="text-xl w-full  mx-auto mt-5 !py-4">Login</Button>
     </form>
   )

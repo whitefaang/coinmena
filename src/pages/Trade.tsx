@@ -34,7 +34,13 @@ function Trade({}: Props) {
     return <Error />
   }
 
-  const baseCrypto = new URLSearchParams(search).get('base')
+  const params = new URLSearchParams(search)
+  const baseCrypto = params.get('base')
+  const initialDirection = params.get('dir') || 'Buy'
+  const directionMap: any = {
+    Buy: 'ftc',
+    Sell: 'ctf',
+  }
 
   return (
     <>
@@ -49,6 +55,7 @@ function Trade({}: Props) {
             ? cryptosApi.data.find((c: any) => c.Symbol === baseCrypto)
             : cryptosApi.data[0]
         }
+        initialDirection={directionMap[initialDirection] as any}
         availableCryptos={cryptosApi.data}
         availableFiats={availableCurrencies.data}
       />
