@@ -3,10 +3,23 @@
  */
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import { Coin } from '../models'
+import { CryptoAsset } from '../models'
 import { fetchCryptoAssets } from '../services'
 
-function useCryptoAssets(limit = 10) {
+interface ReturnProps {
+  page: number
+  next: () => void
+  prev: () => void
+  lastUpdated: string
+  sortKey: string
+  sortBy: (key: string, direction: string) => void
+  loading: boolean
+  isRefetching: boolean
+  error: any
+  data: CryptoAsset[]
+}
+
+function useCryptoAssets(limit = 10): ReturnProps {
   // page no. state
   const [page, setPage] = useState(1)
   // sort key state
@@ -58,7 +71,7 @@ function useCryptoAssets(limit = 10) {
     error: cryptos.error,
     data: cryptos.data
       ? cryptos.data.data
-          ?.map((coin: any): Coin => {
+          ?.map((coin: any): CryptoAsset => {
             return {
               Name: coin.name,
               Price: coin.metrics.market_data.price_usd.toFixed(3),
@@ -69,7 +82,7 @@ function useCryptoAssets(limit = 10) {
                   ?.logo || 'dollar.jfif',
             }
           })
-          .sort((a: Coin, b: Coin) => {
+          .sort((a: CryptoAsset, b: CryptoAsset) => {
             if (sKey === 'Name') {
               const textA = a[sKey].toLowerCase()
               const textB = b[sKey].toLowerCase()

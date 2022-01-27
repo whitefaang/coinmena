@@ -2,10 +2,9 @@
  * Assets table component for crypto assets
  */
 import classNames from 'classnames'
-import { nanoid } from 'nanoid'
 import React, { useMemo } from 'react'
 import useCryptoAssets from '../hooks/useCryptoAssets'
-import { Coin } from '../models'
+import { CryptoAsset } from '../models'
 import { useUIStore } from '../store/uiStore'
 import Button from './atomic/Button'
 import Error from './Error'
@@ -14,7 +13,7 @@ function AssetsTable() {
   const cryptos = useCryptoAssets()
   const { selectedCoin, selectCoin } = useUIStore((state) => state)
 
-  const selectCoinForTrade = (coin: Coin) => {
+  const selectCoinForTrade = (coin: CryptoAsset) => {
     if (selectedCoin && (selectedCoin as any).ID === coin.ID) {
       return
     }
@@ -45,53 +44,61 @@ function AssetsTable() {
   }
   const TBody = () => {
     if (cryptos.loading) {
-      return Array(10)
-        .fill(0)
-        .map((_, idx) => {
-          return (
-            <tr key={idx} className="bg-white border-gray-200">
-              {Array(2)
-                .fill(0)
-                .map((_, idx) => {
-                  return (
-                    <td key={idx} className="pl-3 py-5 gap-4">
-                      <div className="h-6 w-1/3 bg-gray-200 rounded-lg animate-pulse"></div>
-                    </td>
-                  )
-                })}
-            </tr>
-          )
-        })
+      return (
+        <>
+          {Array(10)
+            .fill(0)
+            .map((_, idx) => {
+              return (
+                <tr key={idx} className="bg-white border-gray-200">
+                  {Array(2)
+                    .fill(0)
+                    .map((_, idx) => {
+                      return (
+                        <td key={idx} className="pl-3 py-5 gap-4">
+                          <div className="h-6 w-2/3 lg:w-1/3 bg-gray-200 rounded-lg animate-pulse"></div>
+                        </td>
+                      )
+                    })}
+                </tr>
+              )
+            })}
+        </>
+      )
     }
 
-    return cryptos.data.map((d: Coin) => {
-      return useMemo(
-        () => (
-          <tr
-            key={d.ID as string}
-            className={classNames(
-              'bg-white hover:bg-primary-muted border-b border-gray-200 text-sm cursor-pointer font-semibold',
-              {
-                '!bg-primary':
-                  selectedCoin && (selectedCoin as any).ID === d.ID,
-              }
-            )}
-            onClick={() => selectCoinForTrade(d)}
-          >
-            <td className="flex items-center gap-4 px-5 py-3">
-              <img
-                src={d.Logo}
-                alt={d.Name}
-                className="w-10 h-10 rounded-full shadow-md"
-              />
-              <span>{d.Name}</span>
-            </td>
-            <td>{`$${d.Price}`}</td>
-          </tr>
-        ),
-        [d.ID]
-      )
-    })
+    return (
+      <>
+        {cryptos.data.map((d: CryptoAsset) => {
+          return useMemo(
+            () => (
+              <tr
+                key={d.ID as string}
+                className={classNames(
+                  'bg-white hover:bg-primary-muted border-b border-gray-200 text-sm cursor-pointer font-semibold',
+                  {
+                    '!bg-primary':
+                      selectedCoin && (selectedCoin as any).ID === d.ID,
+                  }
+                )}
+                onClick={() => selectCoinForTrade(d)}
+              >
+                <td className="flex items-center gap-4 px-5 py-3">
+                  <img
+                    src={d.Logo}
+                    alt={d.Name}
+                    className="w-10 h-10 rounded-full shadow-md"
+                  />
+                  <span>{d.Name}</span>
+                </td>
+                <td>{`$${d.Price}`}</td>
+              </tr>
+            ),
+            [d.ID]
+          )
+        })}
+      </>
+    )
   }
 
   return (

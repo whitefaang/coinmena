@@ -1,4 +1,4 @@
-export interface Coin {
+export interface CryptoAsset {
   Name: string
   Price: number
   ID: string
@@ -11,7 +11,7 @@ export interface UserInfo {
   password: string
 }
 
-export interface Country {
+export interface FiatCurrency {
   code: string
   description: string
 }

@@ -56,7 +56,8 @@ function Trade({}: Props) {
       <ExchangeForm
         initialCrypto={
           baseCrypto
-            ? cryptosApi.data.find((c: any) => c.Symbol === baseCrypto)
+            ? cryptosApi.data.find((c: any) => c.Symbol === baseCrypto) ||
+              cryptosApi.data[0]
             : cryptosApi.data[0]
         }
         initialDirection={directionMap[initialDirection] as any}

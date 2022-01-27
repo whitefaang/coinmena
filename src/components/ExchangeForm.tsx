@@ -1,49 +1,25 @@
 import classNames from 'classnames'
-import React, { ReactElement, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import useDebounce from '../hooks/useDebounce'
-import { Coin, Country } from '../models'
+import { CryptoAsset, FiatCurrency } from '../models'
 import { getExchangeRate } from '../services'
 import Button from './atomic/Button'
-import Input from './atomic/Input'
 import Modal from './atomic/Modal'
+import SearchWrapper from './SearchWrapper'
 
 type Direction = 'ctf' | 'ftc'
 
 type Props = {
-  initialCrypto: Coin
+  initialCrypto: CryptoAsset
   initialDirection?: Direction
-  availableFiats: Record<string, Country>
-  availableCryptos: Coin[]
+  availableFiats: Record<string, FiatCurrency>
+  availableCryptos: CryptoAsset[]
 }
 
 const directionMap = {
   ctf: 'ctf',
   ftc: 'ftc',
-}
-
-const SearchWrapper = ({
-  children,
-}: {
-  children: (
-    searchKey: string,
-    setSearchKey: (searchKey: string) => void
-  ) => ReactElement
-}) => {
-  const [searchKey, setSearchKey] = useState('')
-  const render = () => children(searchKey, setSearchKey)
-  return (
-    <div>
-      <Input
-        name="searchKey"
-        className="shadow-md sticky"
-        placeholder="Search .."
-        value={searchKey}
-        onChange={(e: any) => setSearchKey(e.target.value)}
-      />
-      {render()}
-    </div>
-  )
 }
 
 function ExchangeForm({
@@ -54,8 +30,8 @@ function ExchangeForm({
 }: Props) {
   // form state for the state
   const [form, setForm] = useState<{
-    crypto: Coin
-    fiat: Country
+    crypto: CryptoAsset
+    fiat: FiatCurrency
     cryptoAmount: number
     fiatAmount: number
     conversionDir: Direction
@@ -117,11 +93,11 @@ function ExchangeForm({
     debouncedCryptoAmount,
   ])
 
-  const selectCrypto = (crypto: Coin) => {
+  const selectCrypto = (crypto: CryptoAsset) => {
     setForm((prev) => ({ ...prev, crypto, modal: null }))
   }
 
-  const selectFiat = (fiat: Country) => {
+  const selectFiat = (fiat: FiatCurrency) => {
     setForm((prev) => ({ ...prev, fiat, modal: null }))
   }
 

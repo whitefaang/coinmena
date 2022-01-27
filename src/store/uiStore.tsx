@@ -2,13 +2,13 @@
  * Store for all ui related config
  */
 import create from 'zustand'
-import { Coin, UserInfo } from '../models'
+import { CryptoAsset, UserInfo } from '../models'
 
 interface UIStore {
   /**
    * Selected coin from the "<AssetsTable />" component
    */
-  selectedCoin: Coin | null
+  selectedCoin: CryptoAsset | null
   /**
    * User info of the currently logged in user
    */
@@ -18,7 +18,7 @@ interface UIStore {
    * @param selectedCoin
    * @returns
    */
-  selectCoin: (selectedCoin: Coin | null) => void
+  selectCoin: (selectedCoin: CryptoAsset | null) => void
   /**
    * func to set the 'user' from <LoginForm />
    * @param user
