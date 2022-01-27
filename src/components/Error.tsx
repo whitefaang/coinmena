@@ -5,7 +5,7 @@ import React from 'react'
 
 function Error() {
   return (
-    <div className="h-full w-full bg-surface flex flex-col justify-center items-center shadow-lg">
+    <div className="h-full w-full bg-surface flex flex-col justify-center items-center shadow-lg py-8">
       <div className="text-center">
         <p className="mb-4 text-red-500">
           <svg
