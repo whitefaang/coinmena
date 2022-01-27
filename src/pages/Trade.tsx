@@ -1,5 +1,6 @@
 import React from 'react'
 import { useQuery } from 'react-query'
+import { useLocation } from 'react-router-dom'
 import Modal from '../components/atomic/Modal'
 import Error from '../components/Error'
 import ExchangeForm from '../components/ExchangeForm'
@@ -13,6 +14,7 @@ type Props = {}
 function Trade({}: Props) {
   const user = useUIStore((state) => state.user)
   const cryptosApi = useCryptoAssets(50)
+  const search = useLocation().search
 
   const availableCurrencies = useQuery(
     'fiat/currencies',
@@ -32,6 +34,8 @@ function Trade({}: Props) {
     return <Error />
   }
 
+  const baseCrypto = new URLSearchParams(search).get('base')
+
   return (
     <>
       <Modal show={!user}>
@@ -40,6 +44,11 @@ function Trade({}: Props) {
         </div>
       </Modal>
       <ExchangeForm
+        initialCrypto={
+          baseCrypto
+            ? cryptosApi.data.find((c: any) => c.Symbol === baseCrypto)
+            : cryptosApi.data[0]
+        }
         availableCryptos={cryptosApi.data}
         availableFiats={availableCurrencies.data}
       />

@@ -8,7 +8,8 @@ import Button from './atomic/Button'
 import Modal from './atomic/Modal'
 
 type Props = {
-  availableFiats: any
+  initialCrypto: Coin
+  availableFiats: Record<string, Country>
   availableCryptos: Coin[]
 }
 
@@ -35,7 +36,11 @@ const scientificToReadable = (num: any) => {
   return num
 }
 
-function ExchangeForm({ availableCryptos, availableFiats }: Props) {
+function ExchangeForm({
+  availableCryptos,
+  availableFiats,
+  initialCrypto,
+}: Props) {
   // form state for the state
   const [form, setForm] = useState<{
     crypto: Coin
@@ -46,7 +51,7 @@ function ExchangeForm({ availableCryptos, availableFiats }: Props) {
     modal: 'crypto' | 'fiat' | null
   }>({
     fiat: { code: 'USD', description: 'United Stated Dollar' },
-    crypto: availableCryptos[0],
+    crypto: initialCrypto,
     fiatAmount: 1,
     cryptoAmount: 1,
     conversionDir: 'ftc',
