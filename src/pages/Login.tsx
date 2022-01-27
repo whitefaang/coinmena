@@ -23,10 +23,13 @@ function Login() {
   const search = useLocation().search
   const user = useUIStore((state) => state.user)
 
+  // check if user exists
+  // if yes, navigate to home dashboard
   if (user) {
     return <Navigate to="/" />
   }
 
+  // login success callback func
   const onLoginSuccess = () => {
     const params = new URLSearchParams(search)
     const next = params.get('next')
@@ -35,9 +38,16 @@ function Login() {
 
   return (
     <div className="px-3 py-6 rounded-2xl flex flex-wrap justify-evenly">
+      {/*
+       * Login form
+       */}
       <div className="md:w-1/3 md:order-2 mb-10">
         <LoginForm onSuccess={onLoginSuccess} />
       </div>
+
+      {/*
+       * Some short messages
+       */}
       <div className="md:w-1/3 grid md:order-1">
         {shorts.map((s) => (
           <div key={s} className="flex gap-x-5 text-lg md:text-2xl">
@@ -62,6 +72,9 @@ function Login() {
         ))}
       </div>
 
+      {/*
+       * some vector art
+       */}
       <svg
         id="clouds"
         className="fixed bottom-[-160px] left-[-230px] w-screen -z-10"

@@ -1,3 +1,7 @@
+/**
+ * Search wrapper component wraps around a list of
+ * elements making them searchable with a search input at the top
+ */
 import React, { ReactElement, useState } from 'react'
 import useDebounce from '../hooks/useDebounce'
 import Input from './atomic/Input'

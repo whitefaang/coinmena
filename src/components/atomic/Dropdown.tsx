@@ -2,7 +2,7 @@ import classNames from 'classnames'
 import React, { ReactElement, useState } from 'react'
 
 /**
- * Props for the <Select> component
+ * Props for the <Dropdown> component
  */
 interface DropdownProps {
   header: string | ReactElement
@@ -11,7 +11,7 @@ interface DropdownProps {
 }
 
 /**
- * Props for the <Select.Option> props
+ * Props for the <Dropdown.Option> props
  */
 interface DropdownOptionProps {
   value: string | number
@@ -20,17 +20,17 @@ interface DropdownOptionProps {
 }
 
 /**
- * Context between <Select> and <Select.Option>
+ * Context between <Dropdown> and <Dropdown.Option>
  */
 const context = React.createContext<{
   onChange: (
     /**
-     * func received from the parent to <Select> component and passed to <Select.Option> component via context
+     * func received from the parent to <Dropdown> component and passed to <Dropdown.Option> component via context
      */
     props: { value: number | string }
   ) => void
   /**
-   * used by <Select.Option> component to close the dropdown when an option is selected
+   * used by <Dropdown.Option> component to close the dropdown when an option is selected
    */
   closeDropDown: () => void
 } | null>(null)
@@ -89,7 +89,7 @@ function Dropdown(
 }
 
 /**
- * This component is to be used as a child of <Select> component
+ * This component is to be used as a child of <Dropdown> component
  * @param {DropdownOptionProps} props
  * @returns {ReactElement}
  */

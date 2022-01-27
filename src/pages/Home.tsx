@@ -14,9 +14,15 @@ function Home() {
 
   return (
     <div className="flex flex-wrap">
+      {/*
+       * Assets table
+       */}
       <div className="w-full xl:w-3/4 xl:px-4">
         <AssetsTable />
       </div>
+      {/*
+       * Switcher shown to buy / sell crypto assets
+       */}
       <div className="mt-4 xl:mt-0 w-full xl:w-1/4 xl:px-4">
         <Switcher>
           <Switcher.Tabs>
