@@ -270,7 +270,7 @@ function ExchangeForm({
               disabled={form.conversionDir === 'ftc'}
               onChange={onAmountChange}
               value={form.cryptoAmount}
-              className="shadow-md h-full w-full rounded-lg focus:outline-none border border-primary-muted focus:border-2 focus:rounded-xl resize-none md:text-5xl p-4"
+              className="shadow-md text-lg h-full w-full rounded-lg focus:outline-none border border-primary-muted focus:border-2 focus:rounded-xl resize-none md:text-5xl p-4"
             />
           </div>
         </div>
@@ -353,7 +353,7 @@ function ExchangeForm({
               onChange={onAmountChange}
               disabled={form.conversionDir === 'ctf'}
               value={form.fiatAmount}
-              className="shadow-md h-full w-full rounded-lg focus:outline-none border border-primary-muted focus:border-2 focus:rounded-xl resize-none md:text-5xl p-4"
+              className="shadow-md text-lg h-full w-full rounded-lg focus:outline-none border border-primary-muted focus:border-2 focus:rounded-xl resize-none md:text-5xl p-4"
             />
           </div>
         </div>

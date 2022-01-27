@@ -33,7 +33,7 @@ function Navbar(): ReactElement {
   return (
     <>
       <Modal show={showLoginModal} onOverlayClick={() => setLoginModal(false)}>
-        <div className="w-10/12 lg:w-1/2 2xl:w-1/3 bg-surface rounded-lg shadow-lg p-8">
+        <div className="bg-surface w-10/12 lg:w-6/12 2xl:w-1/3 px-6 py-10 lg:p-12 rounded-lg shadow-md">
           <LoginForm onSuccess={() => setLoginModal(false)} />
         </div>
       </Modal>

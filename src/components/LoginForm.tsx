@@ -68,7 +68,7 @@ function LoginForm({ onSuccess }: Props) {
 
   return (
     <form className="grid gap-6" onSubmit={onSubmit} noValidate>
-      <div className="text-4xl font-bold">Hi, Welcome Back!</div>
+      <div className="text-2xl lg:text-4xl font-bold">Hi, Welcome Back!</div>
       <p className="text-color-muted mb-5">Start trading now!</p>
       <Input
         label="Email"

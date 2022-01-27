@@ -27,7 +27,11 @@ function Trade({}: Props) {
   )
 
   if (cryptosApi.loading || availableCurrencies.isLoading) {
-    return <p>'Loading .. '</p>
+    return (
+      <div className="h-full w-full flex flex-col items-center justify-center">
+        <div className="w-10/12 md:w-1/3 bg-primary rounded-lg h-1.5 lg:h-3 animate-pulse"></div>
+      </div>
+    )
   }
 
   if (cryptosApi.error || availableCurrencies.error) {
@@ -45,7 +49,7 @@ function Trade({}: Props) {
   return (
     <>
       <Modal show={!user}>
-        <div className="bg-surface w-10/12 lg:w-6/12 2xl:w-1/3 p-12 rounded-lg shadow-md">
+        <div className="bg-surface w-10/12 lg:w-6/12 2xl:w-1/3 px-6 py-10 lg:p-12 rounded-lg shadow-md">
           <LoginForm />
         </div>
       </Modal>

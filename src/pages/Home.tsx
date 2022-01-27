@@ -85,7 +85,7 @@ function Home() {
                     className="w-full"
                     to={`/trade?base=${selectedCoin.Symbol}&dir=${value}`}
                   >
-                    <Button id="buySell" className="w-full">
+                    <Button id="buySell" className="w-full !py-3">
                       Proceed to {value}
                     </Button>
                   </Link>

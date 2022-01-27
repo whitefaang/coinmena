@@ -15,7 +15,7 @@ function Input(props: Props & React.HTMLProps<HTMLInputElement>) {
         {...props}
         id={props.id || props.label}
         className={classNames(
-          'w-full shadow-sm rounded-3xl focus:outline-none border border-primary-muted focus:border-2 p-4',
+          'w-full shadow-sm rounded-3xl focus:outline-none border border-primary-muted focus:border-2 text-md p-3 lg:p-4',
           props.className
         )}
       />
