@@ -13,7 +13,7 @@ export const getAvailableCurrencies = () => {
   )
 }
 
-export const getExchangeRate = (to: string, amount: number) => {
+export const getExchangeRate = (to: string, amount = 1) => {
   return fetch(
     `https://api.exchangerate.host/convert?from=USD&to=${to}&amount=${amount}`
   ).then((res) => res.json())

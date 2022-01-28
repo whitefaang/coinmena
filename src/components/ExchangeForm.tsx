@@ -86,7 +86,7 @@ function ExchangeForm({
   // available currencies api call
   const exchangeRateApi = useQuery(
     'fiat/exchange',
-    () => getExchangeRate(form.fiat.code, form.cryptoAmount),
+    () => getExchangeRate(form.fiat.code),
     {
       initialData: { rates: {} },
       keepPreviousData: true,
@@ -331,7 +331,12 @@ function ExchangeForm({
             </svg>
           </div>
           <div>
-            x<span className="ml-3 font-semibold">{form.crypto.Price}</span>
+            {form.conversionDir === 'ctf' ? (
+              <span>x</span>
+            ) : (
+              <span>&#247;</span>
+            )}
+            <span className="ml-3 font-semibold">{form.crypto.Price}</span>
           </div>
 
           <Button
