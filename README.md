@@ -20,6 +20,7 @@ This project uses many tools like:
 - 3 routes available home, trade and login
 - Includes custom hooks for debounce and transforming api responses from react-query
 - Responsive layout
+- Login validations (any credentials will do as long as valid)
 
 ### Setup
 
