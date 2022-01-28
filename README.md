@@ -15,7 +15,7 @@ This project uses many tools like:
 ### Highlights
 
 - Built with TailwindCSS + ViteJS for smaller and faster builds
-- Custom components like Select, Switcher etc
+- Custom components like Dropdown, Switcher etc
 - Zustand used for state management
 - 3 routes available home, trade and login
 - Includes custom hooks for debounce and transforming api responses from react-query
